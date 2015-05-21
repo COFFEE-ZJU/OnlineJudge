@@ -68,7 +68,7 @@ public class Main1 {
 		return maxScore;
 	}
 	
-	private int solve(){
+	public int solve(){
 		int[] colScores = new int[rowN];
 		for(int j = 0; j < colN; j++){
 			// get best score for each ending position in this column, -1 for impossible
@@ -87,7 +87,7 @@ public class Main1 {
 		return max;
 	}
 
-	public static void test(String[] args) {
+	public static void test() {
 		int[][] grid = new int[][]{
 				new int[]{-1, 4, 5, 1}, 
 				new int[]{2, -1, 2, 4}, 
@@ -117,17 +117,18 @@ public class Main1 {
 	}
 
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		int row = scanner.nextInt();
-		int col = scanner.nextInt();
-		int[][] grid = new int[row][col];
-		for(int i = 0; i < row; i++){
-			for(int j = 0; j < col; j++){
-				grid[i][j] = scanner.nextInt();
-			}
-		}
-		scanner.close();
-		
-		System.out.println(new Main1(grid, row, col).solve());
+		test();
+//		Scanner scanner = new Scanner(System.in);
+//		int row = scanner.nextInt();
+//		int col = scanner.nextInt();
+//		int[][] grid = new int[row][col];
+//		for(int i = 0; i < row; i++){
+//			for(int j = 0; j < col; j++){
+//				grid[i][j] = scanner.nextInt();
+//			}
+//		}
+//		scanner.close();
+//		
+//		System.out.println(new Main1(grid, row, col).solve());
 	}
 }
