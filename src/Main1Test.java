@@ -71,7 +71,7 @@ public class Main1Test {
 			cp = copyGrid(grid);
 			
 			start = System.currentTimeMillis();
-			int s2 = new Main1_2(grid, row, col).solve();
+			long s2 = new SnakeGame(grid, row, col).solve();
 			t2 += (System.currentTimeMillis() - start);
 			
 			start = System.currentTimeMillis();
