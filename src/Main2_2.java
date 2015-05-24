@@ -85,7 +85,7 @@ class TracelInfoCenter{
 	}
 }
 
-public class Main {
+public class Main2_2 {
 	public static void test(){
 		TracelInfoCenter tic = new TracelInfoCenter(5);
 		tic.setAjacent(1, 2);
