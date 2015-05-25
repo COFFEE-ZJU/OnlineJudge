@@ -3,18 +3,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-class TravelInfoCenter{
+class TravelInfoCenter3{
 	private Node[] cities;
 	
-	private int[] subTreeSize;	// the subtree size of this node 
-	private int[] maxSubTreeSize;	// the max subtree size among the children of this node
-	private boolean[] visited;	// whether the node has been processed
+	private int[] subTreeSize;
+	private int[] maxSubTreeSize;
+	private boolean[] visited;
 	
-	private int curTreeSize;	// the subtree size currently used
-	private int curMinMaxSize;	// max subtree size of children of the current root node
-	private int curRootIdx;		// index of the current root node
+	private int curTreeSize;
+	private int curMinMaxSize;
+	private int curRootIdx;
 	
-	public TravelInfoCenter(int cityNum) {
+	public TravelInfoCenter3(int cityNum) {
 		if(cityNum < 1)
 			throw new IllegalArgumentException("city number must be positive");
 		
@@ -24,6 +24,7 @@ class TravelInfoCenter{
 		cities = new Node[cityNum];
 		for(int i = 0; i < cityNum; i++)
 			cities[i] = new Node();
+		
 	}
 	
 	/**
@@ -66,24 +67,18 @@ class TravelInfoCenter{
 	}
 
 	/**
-	 * Get the balanced root, and recursively build the tree.
+	 * Get the balanced root, and recursively build the tree. 
 	 * 
 	 * @param nodeIdx node index
 	 */
 	private void build(int nodeIdx){
-		//get the sizes of each node in this subtree, with nodeIdx as root
 		getSizeDfs(nodeIdx, -1);
-		
-		//get the balanced root of this subtree, stored in curRootIdx
 		curMinMaxSize = curTreeSize = subTreeSize[nodeIdx];
 		curRootIdx = -1;
-		getBalancedRootDfs(nodeIdx, -1);
+		getBalancedRootDfs(nodeIdx);
+		genDistToRoot(curRootIdx);
+		visited[curRootIdx] = true;
 		
-		//generate distances to this root node, for all the nodes in this subtree
-		genDistToRoot(curRootIdx, -1, 0);
-		visited[curRootIdx] = true;		//set the root to be visited
-		
-		//recursively build the subtrees
 		for(Integer idx: cities[curRootIdx].adjacentNodeIndices){
 			if(visited[idx]) continue;
 			build(idx);
@@ -97,16 +92,62 @@ class TravelInfoCenter{
 	 * @param parentNodeIdx parent's node index
 	 * @param dist current distance to balanced root
 	 */
-	private void genDistToRoot(int nodeIdx, int parentNodeIdx, int dist){
-		//store distance information in Nodes
-		cities[nodeIdx].rootIndices.add(curRootIdx);
-		cities[nodeIdx].rootDists.add(dist);
-		
-		//recursively visit children nodes
-		for(Integer idx: cities[nodeIdx].adjacentNodeIndices){
-			if(parentNodeIdx == idx || visited[idx]) continue;
+	private void genDistToRoot(int nodeIdx){
+		List<Integer> nodeIdxList = new LinkedList<Integer>();
+		List<Integer> parentIdxList = new LinkedList<Integer>();
+		List<Integer> distList = new LinkedList<Integer>();
+		nodeIdxList.add(nodeIdx);
+		parentIdxList.add(-1);
+		distList.add(0);
+		while(!nodeIdxList.isEmpty()){
+			int idx = nodeIdxList.get(0);
+			nodeIdxList.remove(0);
+			int parent = parentIdxList.get(0);
+			parentIdxList.remove(0);
+			int dist = distList.get(0);
+			distList.remove(0);
 			
-			genDistToRoot(idx, nodeIdx, dist + 1);
+			cities[idx].rootIndices.add(curRootIdx);
+			cities[idx].rootDists.add(dist);
+			
+			for(Integer childIdx: cities[idx].adjacentNodeIndices){
+				if(parent == childIdx || visited[childIdx]) continue;
+				
+				nodeIdxList.add(0, childIdx);
+				parentIdxList.add(0, idx);
+				distList.add(0, dist + 1);
+			}
+		}
+	}
+	
+	private void getBalancedRootDfs(int nodeIdx){
+		List<Integer> nodeIdxList = new LinkedList<Integer>();
+		List<Integer> parentIdxList = new LinkedList<Integer>();
+		nodeIdxList.add(nodeIdx);
+		parentIdxList.add(-1);
+		while(!nodeIdxList.isEmpty()){
+			int idx = nodeIdxList.get(0);
+			nodeIdxList.remove(0);
+			int parent = parentIdxList.get(0);
+			parentIdxList.remove(0);
+			
+			int maxSubSize;
+			if(curTreeSize - subTreeSize[idx] > maxSubTreeSize[idx])
+				maxSubSize = curTreeSize - subTreeSize[idx];
+			else
+				maxSubSize = maxSubTreeSize[idx];
+			
+			if(maxSubSize < curMinMaxSize){
+				curMinMaxSize = maxSubSize;
+				curRootIdx = nodeIdx;
+			}
+			
+			for(Integer childIdx: cities[idx].adjacentNodeIndices){
+				if(parent == childIdx || visited[childIdx]) continue;
+				
+				nodeIdxList.add(0, childIdx);
+				parentIdxList.add(0, idx);
+			}
 		}
 	}
 	
@@ -116,25 +157,22 @@ class TravelInfoCenter{
 	 * @param nodeIdx node index
 	 * @param parentNodeIdx parent's node index
 	 */
-	private void getBalancedRootDfs(int nodeIdx, int parentNodeIdx){
-		//get max size of subtrees of this node
+	private void getBalancedRootDfsBk(int nodeIdx, int parentNodeIdx){
 		int maxSubSize;
 		if(curTreeSize - subTreeSize[nodeIdx] > maxSubTreeSize[nodeIdx])
 			maxSubSize = curTreeSize - subTreeSize[nodeIdx];
 		else
 			maxSubSize = maxSubTreeSize[nodeIdx];
 		
-		//if this node is best till now, update
 		if(maxSubSize < curMinMaxSize){
 			curMinMaxSize = maxSubSize;
 			curRootIdx = nodeIdx;
 		}
 		
-		//recursively visit children nodes
 		for(Integer idx: cities[nodeIdx].adjacentNodeIndices){
 			if(parentNodeIdx == idx || visited[idx]) continue;
 			
-			getBalancedRootDfs(idx, nodeIdx);
+			getBalancedRootDfsBk(idx, nodeIdx);
 		}
 	}
 	
@@ -146,10 +184,8 @@ class TravelInfoCenter{
 	 * @param parentNodeIdx parent's node index
 	 */
 	private void getSizeDfs(int nodeIdx, int parentNodeIdx){
-		subTreeSize[nodeIdx] = 1;		//include this node
-		maxSubTreeSize[nodeIdx] = 0;	//exclude this node
-		
-		//recursively get the size of children and add up
+		subTreeSize[nodeIdx] = 1;
+		maxSubTreeSize[nodeIdx] = 0;
 		for(Integer idx: cities[nodeIdx].adjacentNodeIndices){
 			if(parentNodeIdx == idx || visited[idx]) continue;
 			
@@ -167,10 +203,6 @@ class TravelInfoCenter{
 					"city No. should be in the range of 1 and " + cities.length);
 	}
 
-	/**
-	 * Class used to represent a city
-	 *
-	 */
 	class Node{
 		List<Integer> adjacentNodeIndices;
 		int minDistToSubFestive;
@@ -200,7 +232,6 @@ class TravelInfoCenter{
 			
 			minDistToSubFestive = 0;
 			
-			//update all the root nodes of this node
 			Iterator<Integer> itIdx = rootIndices.iterator();
 			Iterator<Integer> itDist = rootDists.iterator();
 			while(itIdx.hasNext()){
@@ -212,9 +243,8 @@ class TravelInfoCenter{
 		}
 		
 		int getMinDistToFestiveCity(){
+//			int minDist = minDistToSubFestive;
 			int minDist = Integer.MAX_VALUE;
-			
-			//visit all the root nodes of this node, get the minimum distance
 			Iterator<Integer> itIdx = rootIndices.iterator();
 			Iterator<Integer> itDist = rootDists.iterator();
 			while(itIdx.hasNext()){
@@ -229,8 +259,27 @@ class TravelInfoCenter{
 	}
 }
 
-public class Main2_2 {
+public class Main2_3 {
+	public static void test(){
+		TravelInfoCenter tic = new TravelInfoCenter(5);
+		tic.setAdjacent(1, 2);
+		tic.setAdjacent(1, 3);
+		tic.setAdjacent(3, 4);
+		tic.setAdjacent(3, 5);
+		
+		tic.init();
+		tic.addFestiveCity(1);
+		
+		System.out.println(tic.getMinDistToFestiveCity(5));
+		System.out.println(tic.getMinDistToFestiveCity(3));
+		
+		tic.addFestiveCity(3);
+		System.out.println(tic.getMinDistToFestiveCity(3));
+		System.out.println(tic.getMinDistToFestiveCity(4));
+	}
+
 	public static void main(String[] args) {
+//		test();
 		Scanner scanner = new Scanner(System.in);
 		
 		int n = scanner.nextInt();
@@ -251,4 +300,5 @@ public class Main2_2 {
 		
 		scanner.close();
 	}
+
 }

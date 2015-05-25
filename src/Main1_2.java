@@ -129,36 +129,7 @@ class SnakeGame {
 
 
 public class Main1_2 {
-	public static void test() {
-		int[][] grid = new int[][]{
-				new int[]{-1, 4, 5, 1}, 
-				new int[]{2, -1, 2, 4}, 
-				new int[]{3, 3, -1, 3}, 
-				new int[]{4, 2, 1, 2}
-				};
-		
-		System.out.println(new SnakeGame(grid, 4, 4).solve());
-		
-		grid = new int[][]{
-				new int[]{-1, 4, 5, 1}, 
-				new int[]{2, -1, 2, 4}, 
-				new int[]{3, 3, -1, -1}, 
-				new int[]{4, 2, 1, 2}
-				};
-		
-		System.out.println(new SnakeGame(grid, 4, 4).solve());
-		
-		grid = new int[][]{
-				new int[]{-1, 4, 5, 1}, 
-				new int[]{2, -1, 2, 4}, 
-				new int[]{3, 3, -1, 3}, 
-				new int[]{4, 2, -1, 2}
-				};
-		
-		System.out.println(new SnakeGame(grid, 4, 4).solve());
-	}
-	
-	public static void scan(String[] args) {
+	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		int row = scanner.nextInt();
 		int col = scanner.nextInt();
@@ -168,16 +139,8 @@ public class Main1_2 {
 				grid[i][j] = scanner.nextInt();
 			}
 		}
-		scanner.reset();
 		scanner.close();
 		
 		System.out.println(new SnakeGame(grid, row, col).solve());
-	}
-	
-	public static void main(String[] args) {
-//		test();
-//		Scanner scanner = new Scanner(System.in);
-		while(true)
-			scan(args);
 	}
 }

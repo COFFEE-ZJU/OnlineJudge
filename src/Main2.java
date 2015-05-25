@@ -2,9 +2,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-class TracelInfoCenter1{
+class TravelInfoCenter1{
 	private Node[] cities;
-	public TracelInfoCenter1(int cityNum) {
+	public TravelInfoCenter1(int cityNum) {
 		if(cityNum < 1)
 			throw new IllegalArgumentException("city number must be positive");
 		
@@ -14,7 +14,7 @@ class TracelInfoCenter1{
 		
 	}
 	
-	public void setAjacent(int city1, int city2){
+	public void setAdjacent(int city1, int city2){
 		checkCityNoRange(city1);
 		checkCityNoRange(city2);
 		if(city1 == city2)
@@ -87,11 +87,11 @@ class TracelInfoCenter1{
 
 public class Main2 {
 	public static void test(){
-		TracelInfoCenter1 tic = new TracelInfoCenter1(5);
-		tic.setAjacent(1, 2);
-		tic.setAjacent(1, 3);
-		tic.setAjacent(3, 4);
-		tic.setAjacent(3, 5);
+		TravelInfoCenter1 tic = new TravelInfoCenter1(5);
+		tic.setAdjacent(1, 2);
+		tic.setAdjacent(1, 3);
+		tic.setAdjacent(3, 4);
+		tic.setAdjacent(3, 5);
 		
 		tic.addFestiveCity(1);
 		
@@ -110,9 +110,9 @@ public class Main2 {
 		int n = scanner.nextInt();
 		int m = scanner.nextInt();
 		
-		TracelInfoCenter1 tic = new TracelInfoCenter1(n);
+		TravelInfoCenter1 tic = new TravelInfoCenter1(n);
 		for(int i = 1; i < n; i++)
-			tic.setAjacent(scanner.nextInt(), scanner.nextInt());
+			tic.setAdjacent(scanner.nextInt(), scanner.nextInt());
 		
 		tic.addFestiveCity(1);
 		
