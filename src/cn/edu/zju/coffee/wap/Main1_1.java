@@ -1,11 +1,13 @@
+package cn.edu.zju.coffee.wap;
+
 import java.util.Scanner;
 
 
-public class Main1 {
+public class Main1_1 {
 	private int[][] grid;
 	private int rowN, colN;
 	
-	public Main1(int[][] grid, int rowN, int colN) {
+	public Main1_1(int[][] grid, int rowN, int colN) {
 		this.grid = grid;
 		this.rowN = rowN;
 		this.colN = colN;
@@ -95,7 +97,7 @@ public class Main1 {
 				new int[]{4, 2, 1, 2}
 				};
 		
-		System.out.println(new Main1(grid, 4, 4).solve());
+		System.out.println(new Main1_1(grid, 4, 4).solve());
 		
 		grid = new int[][]{
 				new int[]{-1, 4, 5, 1}, 
@@ -104,7 +106,7 @@ public class Main1 {
 				new int[]{4, 2, 1, 2}
 				};
 		
-		System.out.println(new Main1(grid, 4, 4).solve());
+		System.out.println(new Main1_1(grid, 4, 4).solve());
 		
 		grid = new int[][]{
 				new int[]{-1, 4, 5, 1}, 
@@ -113,7 +115,7 @@ public class Main1 {
 				new int[]{4, 2, -1, 2}
 				};
 		
-		System.out.println(new Main1(grid, 4, 4).solve());
+		System.out.println(new Main1_1(grid, 4, 4).solve());
 	}
 
 	public static void main(String[] args) {

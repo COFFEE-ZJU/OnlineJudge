@@ -1,3 +1,5 @@
+package cn.edu.zju.coffee.wap;
+
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -75,7 +77,7 @@ public class Main1Test {
 			t2 += (System.currentTimeMillis() - start);
 			
 			start = System.currentTimeMillis();
-			int s1 = new Main1(grid, row, col).solve();
+			int s1 = new Main1_1(grid, row, col).solve();
 			t1 += (System.currentTimeMillis() - start);
 			
 			if(s1 != s2){
@@ -97,7 +99,7 @@ public class Main1Test {
 				new int[]{4, 2, 1, 2}
 				};
 		
-		System.out.println(new Main1(grid, 4, 4).solve());
+		System.out.println(new Main1_1(grid, 4, 4).solve());
 		
 		grid = new int[][]{
 				new int[]{-1, 4, 5, 1}, 
@@ -106,7 +108,7 @@ public class Main1Test {
 				new int[]{4, 2, 1, 2}
 				};
 		
-		System.out.println(new Main1(grid, 4, 4).solve());
+		System.out.println(new Main1_1(grid, 4, 4).solve());
 		
 		grid = new int[][]{
 				new int[]{-1, 4, 5, 1}, 
@@ -115,7 +117,7 @@ public class Main1Test {
 				new int[]{4, 2, -1, 2}
 				};
 		
-		System.out.println(new Main1(grid, 4, 4).solve());
+		System.out.println(new Main1_1(grid, 4, 4).solve());
 	}
 	
 	public static void main(String[] args) {

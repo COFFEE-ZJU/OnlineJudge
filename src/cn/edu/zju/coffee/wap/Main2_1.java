@@ -1,3 +1,5 @@
+package cn.edu.zju.coffee.wap;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -85,7 +87,7 @@ class TravelInfoCenter1{
 	}
 }
 
-public class Main2 {
+public class Main2_1 {
 	public static void test(){
 		TravelInfoCenter1 tic = new TravelInfoCenter1(5);
 		tic.setAdjacent(1, 2);

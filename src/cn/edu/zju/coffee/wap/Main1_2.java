@@ -1,3 +1,5 @@
+package cn.edu.zju.coffee.wap;
+
 import java.util.Scanner;
 
 
