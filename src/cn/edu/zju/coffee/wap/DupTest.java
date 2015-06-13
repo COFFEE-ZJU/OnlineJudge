@@ -7,14 +7,10 @@ public class DupTest {
 		int s = 0, e = 1;
 		int maxS = 0, maxE = 0;
 		
-		while(e <= str.length()){
+		while(e < str.length()){
 			String sub = str.substring(s, e);
-			boolean b1 = false, b2 = false;
-			if(s!=0)
-				b1 = str.substring(0, s).contains(sub);
-			if(e!=str.length())
-				b2 = str.substring(e).contains(sub);
-			if(b1 || b2){
+			
+			if(str.substring(e).contains(sub)){
 				maxS = s; maxE = e;
 			}
 			else
@@ -27,6 +23,6 @@ public class DupTest {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(new DupTest().longestDupString("aaaaa"));
+		System.out.println(new DupTest().longestDupString("abcdaccsscda"));
 	}
 }

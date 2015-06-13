@@ -3,7 +3,7 @@ package cn.edu.zju.coffee.leetcode.no010;
 public class Solution {
 	private boolean isMatch(String s, String p, int pos1, int pos2) {
         int len1 = s.length() - pos1, len2 = p.length() - pos2;
-		if(len2 == 0)
+		if(len2 == 0)	// pattern string ended
 			return len1 == 0;
 		
         if(len2 == 1 || p.charAt(pos2+1) != '*'){	//match this one
