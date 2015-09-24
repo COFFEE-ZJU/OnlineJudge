@@ -1,10 +1,10 @@
 package cn.edu.zju.coffee.google.codejam.no6234486;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.io.Writer;
 import java.util.Scanner;
+
+import cn.edu.zju.coffee.google.codejam.CodejamUtils;
 
 public class MainB {
 	public static void tmp(String[] args) {
@@ -14,12 +14,14 @@ public class MainB {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Scanner scanner = new Scanner(new File("resources/google/codejam/no6234486/B-small-practice.in"));
-		FileWriter writer = new FileWriter(new File("resources/google/codejam/no6234486/B-small-practice.out"));
+		Scanner scanner = CodejamUtils.getScanner("B-small-practice", MainB.class);
+		Writer writer = CodejamUtils.getWriter("B-small-practice", MainB.class);
+		
 		int t = scanner.nextInt();
 		for(int tt=0; tt<t; tt++){
 			writer.write(format(tt+1, calcDegree(scanner.nextInt(), scanner.nextInt())) + "\n");
 		}
+		
 		writer.close();
 		scanner.close();
 	}

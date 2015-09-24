@@ -1,11 +1,12 @@
 package cn.edu.zju.coffee.google.codejam.no6234486;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import cn.edu.zju.coffee.google.codejam.CodejamUtils;
 
 public class MainA {
 	private static int getIndex(String name, Map<String, Integer> nameMap){
@@ -19,8 +20,9 @@ public class MainA {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Scanner scanner = new Scanner(new File("resources/google/codejam/no6234486/A-small-practice-2.in"));
-		FileWriter writer = new FileWriter(new File("resources/google/codejam/no6234486/A-small-practice-2.out"));
+		Scanner scanner = CodejamUtils.getScanner("A-small-practice-1", MainA.class);
+		Writer writer = CodejamUtils.getWriter("A-small-practice-1", MainA.class);
+		
 		int t = scanner.nextInt();
 		Map<String, Integer> nameMap = new HashMap<String, Integer>();
 		
@@ -43,6 +45,7 @@ public class MainA {
 			writer.write("Case #" + (tt+1) + (res?": Yes\n":": No\n"));
 		}
 		
+		scanner.close();
 		writer.close();
 	}
 	
