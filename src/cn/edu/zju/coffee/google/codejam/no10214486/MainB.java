@@ -49,20 +49,20 @@ public class MainB {
 }
 
 class RatioPair{
-	int p;
-	int q;
+	long p;
+	long q;
 	
-	static int gcd(int m, int n) {   
+	static long gcd(long m, long n) {   
         while (m % n != 0) {   
-            int temp = m % n;   
+        	long temp = m % n;   
             m = n;   
             n = temp;   
         }   
         return n;   
     }   
 	
-	public RatioPair(int p, int q) {
-		int gcd = gcd(p,q);
+	public RatioPair(long p, long q) {
+		long gcd = gcd(p,q);
 		
 		this.p = p / gcd;
 		this.q = q / gcd;
@@ -81,6 +81,12 @@ class RatioPair{
 	public int hashCode(){
 		return (p+" "+q).hashCode();
 	}
+
+	@Override
+	public String toString() {
+		return "RatioPair [p=" + p + ", q=" + q + "]";
+	}
+	
 }
 
 class Bike{
@@ -98,28 +104,39 @@ class Bike{
 
 	void calc(){
 		ratioPairs = new HashSet<RatioPair>();
-		Set<RatioPair> extraPairs = new HashSet<RatioPair>();
-		Set<RatioPair> ptPairs = new HashSet<RatioPair>();
+//		Set<RatioPair> extraPairs = new HashSet<RatioPair>();
+//		Set<RatioPair> ptPairs = new HashSet<RatioPair>();
 		for(int i = 0; i < eTeeth.length; i++){
 			for(int j = 0; j < eTeeth.length; j++){
 				if(i == j) continue;
-				extraPairs.add(new RatioPair(eTeeth[i], eTeeth[j]));
+				ratioPairs.add(new RatioPair(eTeeth[i], eTeeth[j]));
 			}
 		}
+//		System.out.println("ratioPairs: "+ratioPairs);
 		
-		for(int i = 0; i < pTeeth.length; i++){
-			for(int j = 0; j < tTeeth.length; j++){
-				ptPairs.add(new RatioPair(pTeeth[i], tTeeth[j]));
-			}
-		}
-		
-		for(RatioPair rp1 : ptPairs){
-			for(RatioPair rp2 : extraPairs)
-				ratioPairs.add(new RatioPair(rp1.p*rp2.p, rp1.q*rp2.q));
-		}
+//		for(int i = 0; i < pTeeth.length; i++){
+//			for(int j = 0; j < tTeeth.length; j++){
+//				ptPairs.add(new RatioPair(pTeeth[i], tTeeth[j]));
+//			}
+//		}
+//		
+//		for(RatioPair rp1 : ptPairs){
+//			for(RatioPair rp2 : extraPairs)
+//				ratioPairs.add(new RatioPair(rp1.p*rp2.p, rp1.q*rp2.q));
+//		}
 	}
 	
 	boolean query(int p, int q){
-		return ratioPairs.contains(new RatioPair(p, q));
+		for(int i = 0; i < pTeeth.length; i++){
+			for(int j = 0; j < tTeeth.length; j++){
+				RatioPair rp = new RatioPair(p, q);
+				
+				rp = new RatioPair(rp.p*tTeeth[j], rp.q*pTeeth[i]);
+//				System.out.println("query: "+rp);
+				if(ratioPairs.contains(rp))
+					return true;
+			}
+		}
+		return false;
 	}
 }
