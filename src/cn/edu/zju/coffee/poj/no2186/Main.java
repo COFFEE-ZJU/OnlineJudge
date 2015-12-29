@@ -1,8 +1,10 @@
 package cn.edu.zju.coffee.poj.no2186;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
@@ -33,8 +35,9 @@ class Node{
 		nodes = new LinkedList<Node>();
 	}
 	
-	public void addNode(Node node){
+	public boolean addNode(Node node){
 		nodes.add(node);
+		return nodes.size() == 1;
 	}
 
 	@Override
@@ -54,42 +57,107 @@ class Graph{
 	Node[] allNodes;
 	int num;
 	
+	List<Node> stack;
+	boolean[] inStack;
+	int[] dfn, low;
+	int visitCnt = 0, sccCnt = 0;
+	List<Integer> sccSize;
+	int zeroOutCnt;
+	Map<Node, Integer> newNodeMap;
+	
 	public Graph(int num){
 		this.num = num;
 		allNodes = new Node[num];
 		for(int i = 0; i < num; i++)
 			allNodes[i] = new Node(i);
+		
 	}
 	
 	public void addRelation(int id1, int id2){
-		allNodes[id2 - 1].addNode(allNodes[id1 - 1]);
+		if(allNodes[id1 - 1].addNode(allNodes[id2 - 1]))
+			zeroOutCnt --;
+	}
+	
+	private void tarjan(Node node){
+		int i = node.id;
+		dfn[i] = visitCnt++;
+		low[i] = dfn[i];
+		stack.add(0, node);
+		inStack[i] = true;
+		for(Node n : allNodes[i].nodes){
+			if(dfn[n.id] == -1){
+				tarjan(n);
+				if(low[i] > low[n.id])
+					low[i] = low[n.id];
+			}
+			else if(inStack[n.id] && low[i] > low[n.id]){
+				low[i] = low[n.id];
+			}
+		}
+		if(low[i] == dfn[i]){
+			int newNodeId = sccCnt++;
+			int size = 0;
+			Node tn = stack.remove(0);
+			newNodeMap.put(tn, newNodeId);
+			size ++;
+			while(tn != node){
+				tn = stack.remove(0);
+				newNodeMap.put(tn, newNodeId);
+				size ++;
+			}
+			sccSize.add(size);
+		}
+	}
+	
+	private void doTarjan(){
+		stack = new LinkedList<Node>();
+		inStack = new boolean[num];
+		dfn = new int[num];
+		for(int i = 0; i < num; i++) dfn[i] = -1;
+		low = new int[num];
+		zeroOutCnt = num;
+		newNodeMap = new HashMap<Node, Integer>();
+		sccSize = new LinkedList<Integer>();
+		
+		for(int i = 0; i < num; i++){
+			if(dfn[i] == -1) tarjan(allNodes[i]);
+		}
 	}
 	
 	public int calcPopularNum(){
-		Set<Node> nodesVisited = new HashSet<Node>();
-		Queue<Node> nodes2Visit = new LinkedList<Node>();
-		int popNum = 0;
-		for(Node node : allNodes){
-			nodesVisited.clear();
-			nodes2Visit.clear();
-			nodesVisited.add(node);
-			nodes2Visit.add(node);
-			
-			while(! nodes2Visit.isEmpty()){
-				Node n = nodes2Visit.poll();
-				for(Node nn: n.nodes){
-					if(nodesVisited.contains(nn))
+		if(zeroOutCnt > 1)
+			return 0;
+		else if(zeroOutCnt == 1)
+			return 1;
+		else{
+			doTarjan();
+			if(sccCnt == 1)
+				return num;
+			else{
+				Set<Integer> set = new HashSet<Integer>();
+				for(int i = 0; i < sccCnt; i++)
+					set.add(i);
+				
+				for(Node n : allNodes){
+					int newid = newNodeMap.get(n);
+					if(! set.contains(newid))
 						continue;
-					
-					nodes2Visit.add(nn);
-					nodesVisited.add(nn);
+					for(Node nn : n.nodes){
+						if(newid != newNodeMap.get(nn)){
+							set.remove(newid);
+							break;
+						}
+					}
 				}
+				
+				if(set.size() == 1){
+					int newid = set.iterator().next();
+					return sccSize.get(newid);
+				}
+				else
+					return 0;
 			}
-			
-			if(nodesVisited.size() == num)
-				popNum ++;
 		}
 		
-		return popNum;
 	}
 }
