@@ -11,18 +11,15 @@ public class Solution {
         if(nums == null || nums.length < 3)
             return toList(set);
 
-        List<Integer> numList = new ArrayList<>(nums.length);
-        for(int n : nums)
-            numList.add(n);
+        Arrays.sort(nums);
 
-        Collections.sort(numList);
-        for (int i = 1; i < numList.size() - 1; i++) {
-            int dest = 0 - numList.get(i);
-            int m = 0, n = numList.size() - 1;
-            while(m < i && n > i){
-                int sum = numList.get(m) + numList.get(n);
+        for (int i = 0; i < nums.length - 2; i++) {
+            int dest = 0 - nums[i];
+            int m = i+1, n = nums.length - 1;
+            while(m < n){
+                int sum = nums[m] + nums[n];
                 if(sum == dest){
-                    set.add(new Triple(numList.get(m), dest, numList.get(n)));
+                    set.add(new Triple(nums[i], nums[m], nums[n]));
                     m ++;
                     n --;
                 }
