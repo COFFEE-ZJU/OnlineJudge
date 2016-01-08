@@ -1,29 +1,6 @@
 package cn.edu.zju.coffee.leetcode.no024;
 
-class ListNode {
-	int val;
-	ListNode next;
-	ListNode(int x) { val = x; }
-	
-	static ListNode genNode(int[] xs){
-		if(xs.length == 0) return null;
-		ListNode head = new ListNode(xs[0]), tail = head;
-		for(int i = 1; i < xs.length; i++){
-			ListNode node = new ListNode(xs[i]);
-			tail.next = node;
-			tail = node;
-		}
-		return head;
-	}
-	
-	public void print(){
-		System.out.print(val);
-		if(next != null){
-			System.out.print(" -> ");
-			next.print();
-		}
-	}
-}
+import cn.edu.zju.coffee.leetcode.ListNode;
 
 public class Solution {
     public ListNode swapPairs(ListNode head) {
@@ -47,6 +24,6 @@ public class Solution {
     
     public static void main(String[] args) {
 		ListNode node = new Solution().swapPairs(ListNode.genNode(new int[]{1,2,3,4,5}));
-		node.print();
+		System.out.println(node);
 	}
 }

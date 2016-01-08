@@ -1,30 +1,6 @@
 package cn.edu.zju.coffee.leetcode.no025;
 
-class ListNode {
-	int val;
-    ListNode next;
-	ListNode(int x) { val = x; }
-	
-	static ListNode genNode(int[] xs){
-		if(xs.length == 0) return null;
-		ListNode head = new ListNode(xs[0]), tail = head;
-		for(int i = 1; i < xs.length; i++){
-			ListNode node = new ListNode(xs[i]);
-			tail.next = node;
-			tail = node;
-		}
-		return head;
-	}
-
-	@Override
-	public String toString() {
-		return "Node(" + val +") -> " + next;
-	}
-
-	public void print(){
-		System.out.print(this);
-	}
-}
+import cn.edu.zju.coffee.leetcode.ListNode;
 
 public class Solution {
 
@@ -78,6 +54,6 @@ public class Solution {
     
     public static void main(String[] args) {
 		ListNode node = new Solution().reverseKGroup(ListNode.genNode(new int[]{1}), 2);
-		node.print();
+		System.out.println(node);
 	}
 }

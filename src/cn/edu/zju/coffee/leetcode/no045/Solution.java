@@ -6,6 +6,9 @@ import java.util.PriorityQueue;
  * Created by Zhangkefei on 2016/1/6.
  */
 public class Solution {
+    public boolean canJump(int[] nums) {
+        return jump(nums) != -1;
+    }
 
     public int jump(int[] nums) {
         if (nums == null || nums.length <= 1)
@@ -22,8 +25,13 @@ public class Solution {
 
         for (int i = 1; i < len; i++) {
             JumpInfo prev = heap.peek();
-            for (; nums[prev.idx] + prev.idx < i; prev = heap.peek())
+            for (; nums[prev.idx] + prev.idx < i; prev = heap.peek()) {
                 heap.poll();
+                if (heap.isEmpty())
+                    break;
+            }
+            if (heap.isEmpty())
+                return -1;
 
             prevJumps[i] = prev.prevJump + 1;
             heap.add(new JumpInfo(i, prevJumps[i]));
@@ -43,19 +51,6 @@ public class Solution {
         @Override
         public int compareTo(JumpInfo o) {
             return Integer.compare(prevJump, o.prevJump);
-        }
-    }
-
-    private void jump(int[] nums, int[] prevJumps, int curPos){
-        if (prevJumps[curPos] >= prevJumps[nums.length - 1] - 1)
-            return;
-
-        int maxPos = Math.min(curPos + nums[curPos], nums.length - 1);
-        for (int i = maxPos; i > curPos; i--) {
-            if (prevJumps[curPos] + 1 < prevJumps[i]) {
-                prevJumps[i] = prevJumps[curPos] + 1;
-                jump(nums, prevJumps, i);
-            }
         }
     }
 

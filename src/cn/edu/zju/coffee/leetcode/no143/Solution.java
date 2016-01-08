@@ -1,13 +1,9 @@
 package cn.edu.zju.coffee.leetcode.no143;
 
+import cn.edu.zju.coffee.leetcode.ListNode;
+
 import java.util.LinkedList;
 import java.util.List;
-
-class ListNode {
-    int val;
-    ListNode next;
-    ListNode(int x) { val = x; }
-}
 
 public class Solution {
     public void reorderList(ListNode head) {

@@ -1,5 +1,7 @@
 package cn.edu.zju.coffee.leetcode.no002;
 
+import cn.edu.zju.coffee.leetcode.ListNode;
+
 /**
  * Runtime Error, solved:
  * very strange you need to cut out the ListNode definition before submission
@@ -7,31 +9,6 @@ package cn.edu.zju.coffee.leetcode.no002;
  * @author Zhangkefei
  *
  */
-
-class ListNode {
-	int val;
-	ListNode next;
-	ListNode(int x) { val = x; }
-	
-	static ListNode genNode(int[] xs){
-		if(xs.length == 0) return null;
-		ListNode head = new ListNode(xs[0]), tail = head;
-		for(int i = 1; i < xs.length; i++){
-			ListNode node = new ListNode(xs[i]);
-			tail.next = node;
-			tail = node;
-		}
-		return head;
-	}
-	
-	void print(){
-		System.out.print(val);
-		if(next != null){
-			System.out.print(" -> ");
-			next.print();
-		}
-	}
-}
 
 public class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
@@ -84,6 +61,6 @@ public class Solution {
     
     public static void main(String[] args) {
 		ListNode node = new Solution().addTwoNumbers(ListNode.genNode(new int[]{0,2,2}), ListNode.genNode(new int[]{0,2,2,0}));
-		node.print();
+		System.out.println(node);
 	}
 }

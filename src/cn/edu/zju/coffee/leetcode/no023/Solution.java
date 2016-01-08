@@ -1,32 +1,9 @@
 package cn.edu.zju.coffee.leetcode.no023;
 
+import cn.edu.zju.coffee.leetcode.ListNode;
+
 import java.util.Comparator;
 import java.util.PriorityQueue;
-
-class ListNode {
-	int val;
-	ListNode next;
-	ListNode(int x) { val = x; }
-	
-	static ListNode genNode(int[] xs){
-		if(xs.length == 0) return null;
-		ListNode head = new ListNode(xs[0]), tail = head;
-		for(int i = 1; i < xs.length; i++){
-			ListNode node = new ListNode(xs[i]);
-			tail.next = node;
-			tail = node;
-		}
-		return head;
-	}
-	
-	public void print(){
-		System.out.print(val);
-		if(next != null){
-			System.out.print(" -> ");
-			next.print();
-		}
-	}
-}
 
 public class Solution {
 	private Comparator<ListNode> comp = new Comparator<ListNode>() {
@@ -65,6 +42,6 @@ public class Solution {
     			};
     	
     	ListNode head = new Solution().mergeKLists(lists);
-    	head.print();
+		System.out.println(head);
 	}
 }
