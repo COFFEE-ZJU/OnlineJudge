@@ -1,7 +1,26 @@
 package cn.edu.zju.coffee.leetcode.no084;
 
+import java.util.Arrays;
+import java.util.Stack;
+
 public class Solution {
     public int largestRectangleArea(int[] height) {
+        Stack<Integer> stack = new Stack<>();
+        int i = 0;
+        int maxArea = 0;
+        int[] h = Arrays.copyOf(height, height.length + 1);
+        while(i < h.length){
+            if(stack.isEmpty() || h[stack.peek()] <= h[i]){
+                stack.push(i++);
+            }else {
+                int t = stack.pop();
+                maxArea = Math.max(maxArea, h[t] * (stack.isEmpty() ? i : i - stack.peek() - 1));
+            }
+        }
+        return maxArea;
+    }
+
+    public int largestRectangleAreaBad(int[] height) {
         if(height == null || height.length == 0)
         	return 0;
         
