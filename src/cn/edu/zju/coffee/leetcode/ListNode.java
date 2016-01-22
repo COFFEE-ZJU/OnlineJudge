@@ -8,6 +8,10 @@ public class ListNode {
     public ListNode next;
     public ListNode(int x) { val = x; }
 
+    public static ListNode genNodes(int ... xs){
+        return genNode(xs);
+    }
+
     public static ListNode genNode(int[] xs){
         if(xs.length == 0) return null;
         ListNode head = new ListNode(xs[0]), tail = head;
