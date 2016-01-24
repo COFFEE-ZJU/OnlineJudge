@@ -16,6 +16,36 @@ public class Solution {
         else if (s2.length() == 0)
             return s3.equals(s1);
 
+        c1 = s1.toCharArray(); c2 = s2.toCharArray(); c3 = s3.toCharArray();
+        if (c3.length != c1.length + c2.length)
+            return false;
+
+        boolean[][] dp = new boolean[c1.length+1][c2.length+1];
+        dp[0][0] = true;
+        for (int i = 1; i <= c1.length; i++) {
+            dp[i][0] = c1[i-1]==c3[i-1] && dp[i-1][0];
+        }
+        for (int i = 1; i <= c2.length; i++) {
+            dp[0][i] = c2[i-1]==c3[i-1] && dp[0][i-1];
+        }
+        for (int i = 1; i <= c1.length ; i++) {
+            for (int j = 1; j <= c2.length ; j++) {
+                dp[i][j] = (c1[i-1] == c3[i+j-1] && dp[i-1][j]) ||
+                        (c2[j-1] == c3[i+j-1] && dp[i][j-1]);
+            }
+        }
+
+        return dp[c1.length][c2.length];
+    }
+
+    public boolean isInterleaveSlow(String s1, String s2, String s3) {
+        if (s1 == null || s2 == null || s3 == null)
+            return false;
+        if (s1.length() == 0)
+            return s3.equals(s2);
+        else if (s2.length() == 0)
+            return s3.equals(s1);
+
         if (s1.length() > s2.length()){
             c1 = s2.toCharArray();
             c2 = s1.toCharArray();
