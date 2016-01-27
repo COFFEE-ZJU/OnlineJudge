@@ -19,8 +19,10 @@ public class Solution {
             prev.right = node;
         prev = node;
 
+        TreeNode right = node.right;
         addAll(node.left);
-        addAll(node.right);
+        node.left = null;
+        addAll(right);
     }
 
     public static void main(String[] args) {
