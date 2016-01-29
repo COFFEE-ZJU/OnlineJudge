@@ -1,57 +1,54 @@
 package cn.edu.zju.coffee.leetcode.no132;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Solution {
-	List<String> list = new LinkedList<String>();
-	String str;
-	int minCut = Integer.MAX_VALUE;
-	
-	private int indexOfRev(char ch, int start, int end){
-		for(int i = end; i >= start; i--){
-			if(str.charAt(i) == ch)
-				return i;
-		}
-		return -1;
-	}
+	private char[] cs;
+	private boolean[][] dp;
+	public int minCut(String s) {
+        if(s == null || s.length() <= 1) return 0;
 
-	private boolean isPalin(int s, int e){
-		if(e < s) return false;
-		for(int i = s; i <= (s+e)/2; i++){
-			if(str.charAt(i) != str.charAt(s+e-i))
-				return false;
-		}
-		return true;
-	}
-	
-	private void innerPart(int start, int cut){
-		if(cut > minCut) return;
-		if(start >= str.length()){
-			if(minCut > cut)
-				minCut = cut;
-			return ;
-		}
-		
-		int idx = str.length();
-		char curChar = str.charAt(start);
-		while((idx = indexOfRev(curChar, start, idx - 1)) != -1){
-			if(isPalin(start, idx)){
-				innerPart(idx+1, cut+1);
+		cs = s.toCharArray();
+		dp = new boolean[cs.length+1][cs.length+1];
+		for (int i = 0; i < cs.length ; i++)
+			dp[i][i] = dp[i][i+1] = true;
+
+		for (int i = 1; i < cs.length; i++) {
+			for (int j = 0; j < i; j++) {
+				if (dp[j+1][i] && cs[i] == cs[j])
+					dp[j][i+1] = true;
 			}
 		}
-		
+
+		int[] len = new int[cs.length + 1];
+		for (int i = 1; i < len.length; i++)
+			len[i] = Integer.MAX_VALUE;
+		List<Integer> list = new ArrayList<>(cs.length),
+				tmp = new ArrayList<>(cs.length);
+		list.add(0);
+		while (!list.isEmpty()){
+			tmp.clear();
+			for (int idx : list){
+				for (int i = 0; i < len.length; i++) {
+					if (i != idx && dp[idx][i] && len[i] > len[idx] + 1) {
+						len[i] = len[idx] + 1;
+						if (i == cs.length)
+							return len[i]-1;
+						tmp.add(i);
+					}
+				}
+			}
+			List<Integer> t = tmp;
+			tmp = list;
+			list = t;
+		}
+
+		return -1;
 	}
-	public int minCut(String s) {
-        str = s;
-        if(str == null || str.length() <= 1) return 0;
-        
-        minCut = Integer.MAX_VALUE;
-        innerPart(0, -1);
-        return minCut;
-    }
     
     public static void main(String[] args) {
-		System.out.println(new Solution().minCut("apjeasafafwwd"));
+		System.out.println(new Solution().minCut("aab"));
+		System.out.println(new Solution().minCut("aab"));
 	}
 }

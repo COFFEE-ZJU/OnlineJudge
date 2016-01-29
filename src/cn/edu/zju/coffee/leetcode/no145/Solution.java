@@ -1,15 +1,10 @@
 package cn.edu.zju.coffee.leetcode.no145;
 
+import cn.edu.zju.coffee.leetcode.TreeNode;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
-
-class TreeNode {
-	int val;
-	TreeNode left;
-	TreeNode right;
-	TreeNode(int x) { val = x; }
-}
 
 public class Solution {
 	public List<Integer> postorderTraversal(TreeNode root) {
