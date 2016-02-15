@@ -15,6 +15,7 @@ public class TreeNode {
     @Override
     public String toString(){
         List<TreeNode> nodes = new LinkedList<>();
+        TreeNode last = this;
         nodes.add(this);
         StringBuilder sb = new StringBuilder("{");
         while (!nodes.isEmpty()){
@@ -23,10 +24,16 @@ public class TreeNode {
                 sb.append("#,");
             else {
                 sb.append(node.val).append(',');
-                nodes.add(node.left);
-                nodes.add(node.right);
-            }
+                TreeNode tmp = node.left;
+                if (tmp != null) last = tmp;
+                nodes.add(tmp);
 
+                tmp = node.right;
+                if (tmp != null) last = tmp;
+                nodes.add(tmp);
+
+                if (last == node) break;
+            }
         }
 
         sb.append('}');

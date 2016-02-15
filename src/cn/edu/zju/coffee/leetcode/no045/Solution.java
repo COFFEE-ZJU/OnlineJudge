@@ -65,9 +65,9 @@ public class Solution {
         for (int i = 0; i < nums.length; i++)
             nums[i] = 1;
 
-//        System.out.println(new Solution().jump(nums));
+//        System.out.println(new MinStack().jump(nums));
         System.out.println(new Solution().jump(new int[]{1,2,0,1}));
-//        System.out.println(new Solution().jump(new int[]{2,3,1,1,4}));
-//        System.out.println(new Solution().jump(new int[]{7,8,4,2,0,6,4,1,8,7,1,7,4,1,4,1,2,8,2,7,3,7,8,2,4,4,5,3,5,6,8,5,4,4,7,4,3,4,8,1,1,9,0,8,2}));
+//        System.out.println(new MinStack().jump(new int[]{2,3,1,1,4}));
+//        System.out.println(new MinStack().jump(new int[]{7,8,4,2,0,6,4,1,8,7,1,7,4,1,4,1,2,8,2,7,3,7,8,2,4,4,5,3,5,6,8,5,4,4,7,4,3,4,8,1,1,9,0,8,2}));
     }
 }
