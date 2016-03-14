@@ -36,33 +36,30 @@ public class Solution {
             lens[j] = Integer.MAX_VALUE;
         prevList[0] = new LinkedList<>();
 
-        List<Node> frontier = new ArrayList<>(nodes.length);
-        List<Node> tmpSet = new ArrayList<>(nodes.length);
+        Queue<Node> frontier = new LinkedList<>();
+//        List<Node> tmpSet = new ArrayList<>(nodes.length);
         frontier.add(nodes[0]);
         while (!frontier.isEmpty()){
-            tmpSet.clear();
-            for (Node node : frontier){
-                if (node.idx == 1)
-                    return genPath(prevList, 1);
+            Node node = frontier.poll();
+            if (node.idx == 1) {
+                System.out.println("path found : " + node.word);
 
-                int ni = node.idx;
-                for (Node adj : node.adjs) {
-                    int ai = adj.idx;
-                    if (lens[ai] < lens[ni] + 1)
-                        continue;
-
-                    lens[ai] = lens[ni] + 1;
-                    if (prevList[ai] ==  null)
-                        prevList[ai] = new LinkedList<>();
-
-                    prevList[ai].add(node);
-
-                    tmpSet.add(adj);
-                }
+                return genPath(prevList, 1);
             }
-            List<Node> tmp = tmpSet;
-            tmpSet = frontier;
-            frontier = tmp;
+
+            int ni = node.idx;
+            for (Node adj : node.adjs) {
+                int ai = adj.idx;
+                if (lens[ai] < lens[ni] + 1)
+                    continue;
+                if (lens[ai] == Integer.MAX_VALUE) frontier.add(adj);
+
+                lens[ai] = lens[ni] + 1;
+                if (prevList[ai] ==  null)
+                    prevList[ai] = new LinkedList<>();
+
+                prevList[ai].add(node);
+            }
         }
 
         return Collections.emptyList();
