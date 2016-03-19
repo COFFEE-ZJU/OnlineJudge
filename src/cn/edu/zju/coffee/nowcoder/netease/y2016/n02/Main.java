@@ -7,10 +7,11 @@ import java.util.Scanner;
  */
 public class Main {
     public static void main(String[] args) {
-        try(Scanner scanner = new Scanner(System.in)) {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt()) {
             int[] xs = new int[4];
             int[] ys = new int[4];
-            double r = (double)scanner.nextInt();
+            double r = (double) scanner.nextInt();
             for (int i = 0; i < 4; i++) {
                 xs[i] = scanner.nextInt();
                 ys[i] = scanner.nextInt();
@@ -18,9 +19,9 @@ public class Main {
             int hurt = 0;
             for (int i = 0; i < 3; i++) {
                 int x = xs[3] - xs[i], y = ys[3] - ys[i];
-                if (Math.sqrt(x*x + y*y) <= r) hurt++;
+                if (Math.sqrt(x * x + y * y) <= r) hurt++;
             }
-            System.out.println(hurt + "x");
+            System.out.print(hurt + "x");
         }
     }
 }
