@@ -1,4 +1,4 @@
-package cn.edu.zju.coffee.nowcoder.netease.y2016.n01;
+package cn.edu.zju.coffee.nowcoder.netease.y2016_1.n01;
 
 import java.util.Scanner;
 

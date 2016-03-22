@@ -1,4 +1,4 @@
-package cn.edu.zju.coffee.nowcoder.netease.y2016.n03;
+package cn.edu.zju.coffee.nowcoder.netease.y2016_1.n03;
 
 import java.util.*;
 
