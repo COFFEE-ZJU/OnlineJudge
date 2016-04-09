@@ -3,8 +3,7 @@ package hiho.hihointerview5.n1;
 import java.util.Scanner;
 
 /**
- * 
- * Problem Description: http://hihocoder.com/contest/msinterntest/problem/1
+ *
  * @author zkf
  *
  */

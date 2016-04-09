@@ -116,18 +116,6 @@ public class Main {
 	}
 	public void deal() {
 
-//		System.out.println(new Rule("allow","0.0.0.4/32").matches("0.0.0.0"));
-//		System.out.println(new Rule("allow","0.0.0.4").matches("0.0.0.5"));
-//		System.out.println(new Rule("allow","0.0.0.4").matches("0.0.0.4"));
-//		System.out.println(Long.toBinaryString(Rule.addrToLong("255.0.0.0") >>> 24));
-//		System.out.println(Long.toBinaryString(Rule.addrToLong("255.0.0.0") >>> 32));
-//		System.out.println(Long.toBinaryString(1 >>> 32));
-//		System.out.println(Long.toBinaryString(Rule.addrToLong("255.0.0.0") >>> 31));
-//		System.out.println(new Rule("allow","0.0.0.4/0").matches("255.255.255.255"));
-//		System.out.println(new Rule("allow","0.0.0.4/1").matches("255.255.255.255"));
-
-//		System.out.println(Integer.toBinaryString(Rule.addrToLong("255.255.255.0")));
-
 		Scanner scanner = new Scanner(System.in);
 		while (scanner.hasNextInt()) {
 			int n = scanner.nextInt(), m = scanner.nextInt();

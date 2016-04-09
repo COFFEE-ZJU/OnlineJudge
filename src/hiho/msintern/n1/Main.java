@@ -15,7 +15,7 @@ public class Main {
 				}
 				int left = 1, right = Math.min(w,h);
 				while (left <= right) {
-					int mid = (left + right) >>> 1;
+					int mid = (left + right) / 2;
 					int col = w/mid, row = 0;
 					for (int i = 0; i < n; i++) {
 						row += Math.ceil(1.0 * a[i] / col);
