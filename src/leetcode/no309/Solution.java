@@ -5,8 +5,8 @@ public class Solution {
         int sell = 0, sellPrev = 0, buy = Integer.MIN_VALUE;
         for (int p : prices) {
             int nSell = Math.max(buy + p, sell);
-            int nBuy = Math.max(sellPrev - p, buy);
-            buy = nBuy;
+            buy = Math.max(sellPrev - p, buy);
+
             sellPrev = sell;
             sell = nSell;
         }
