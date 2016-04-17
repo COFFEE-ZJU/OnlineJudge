@@ -3,88 +3,78 @@ package leetcode.no218;
 import java.util.*;
 
 public class Solution {
-    private PriorityQueue<Point> queue = new PriorityQueue<>();
+    private static class Building implements Comparable<Building>{
+        int left, right, height;
+        Building(int[] data) {
+            left = data[0];
+            right = data[1];
+            height = data[2];
+        }
+
+        @Override
+        public int compareTo(Building o) {
+            return Integer.compare(o.height, height);
+        }
+    }
+
+    private static class Point {
+        List<Building> toMoveIn = new LinkedList<>();
+        List<Building> toMoveOut = new LinkedList<>();
+
+        int height = 0;
+    }
+
+    private TreeMap<Integer, Point> pointMap = new TreeMap<>();
+    private PriorityQueue<Building> curBuildings = new PriorityQueue<>();
+
+    private Point getChangeByPoint(int idx) {
+        Point point = pointMap.get(idx);
+        if (point == null) {
+            point = new Point();
+            pointMap.put(idx, point);
+        }
+
+        return point;
+    }
+
     public List<int[]> getSkyline(int[][] buildings) {
         if (buildings == null || buildings.length == 0)
             return Collections.emptyList();
 
-        int curX = 0, curI = 0;
-        int len = buildings.length;
+        pointMap.clear();
+
+        for (int[] b : buildings) {
+            Building building = new Building(b);
+            Point moveIn = getChangeByPoint(building.left);
+            Point moveOut = getChangeByPoint(building.right);
+            moveIn.toMoveIn.add(building);
+            moveOut.toMoveOut.add(building);
+        }
+
+        curBuildings.clear();
+        for (Point point : pointMap.values()) {
+            for (Building b : point.toMoveIn)
+                curBuildings.add(b);
+            for (Building b : point.toMoveOut)
+                curBuildings.remove(b);
+
+            point.height = curBuildings.isEmpty() ?
+                    0 : curBuildings.peek().height;
+        }
+
         List<int[]> res = new LinkedList<>();
-        queue.clear();
-        while (!(queue.isEmpty() && curI == len)) {
-            long q = queue.isEmpty() ? Long.MAX_VALUE : queue.peek().x;
-            long b = curI == len ? Long.MAX_VALUE : buildings[curI][0];
-            if (b <= q) {
-                int[] bd = buildings[curI++];
-                curX = bd[0];
-                queue.add(new Point(bd[2], bd[1]));
-                Point peek = queue.peek();
-                if (peek.height <= bd[2])
-                    res.add(new int[]{bd[0], bd[2]});
-            } else {
-                Point point = queue.poll();
-                if (point.x > curX) {
-                    curX = point.x;
-                    res.add(new int[]{point.x, point.height});
-                }
-            }
-            if (queue.isEmpty())
-                res.add(new int[]{curX, 0});
-        }
-
-        List<int[]> res2 = new LinkedList<>();
-        int[] prev = null;
-        for (int[] pt : res){
-            if (prev == null) {
-                prev = pt;
+        int prevHeight = -1;
+        for (Map.Entry<Integer, Point> ent : pointMap.entrySet()) {
+            int idx = ent.getKey();
+            Point point = ent.getValue();
+            if (point.height == prevHeight)
                 continue;
-            }
 
-            int[] pta = null;
-            if (pt[1] >= prev[1] && (res2.isEmpty() || res2.get(res2.size()-1)[1] != prev[1]))
-                pta = prev;
-            else
-                pta = new int[]{prev[0], pt[1]};
-
-
-            if (pta != null && (res2.isEmpty() || res2.get(res2.size()-1)[1] != pta[1])){
-                if (res2.isEmpty())
-                    res2.add(pta);
-                else {
-                    int[] pp = res2.remove(res2.size()-1);
-                    if (pp[0] == pta[0])
-                        res2.add(pp);
-                    else if (pp[1] == pta[1])
-                        res2.add(pta);
-                    else {
-                        res2.add(pp);
-                        res2.add(pta);
-                    }
-                }
-            }
-
-            if (pt[1] == 0)
-                prev = null;
-            else
-                prev = pt;
+            prevHeight = point.height;
+            res.add(new int[]{idx, point.height});
         }
+
         return res;
-    }
-
-    private static class Point implements Comparable<Point>{
-        final int height;
-        final int x;
-
-        private Point(int height, int x) {
-            this.height = height;
-            this.x = x;
-        }
-
-        @Override
-        public int compareTo(Point o) {
-            return Integer.compare(o.height, height);
-        }
     }
 	
 	public static void main(String[] args) {
