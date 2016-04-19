@@ -1,4 +1,4 @@
-package hiho.msintern.practice;
+package practice;
 
 import java.util.Random;
 

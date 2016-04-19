@@ -1,4 +1,4 @@
-package hiho.msintern.practice;
+package practice;
 
 /**
  * Created by Zhangkefei on 2016/4/17.
