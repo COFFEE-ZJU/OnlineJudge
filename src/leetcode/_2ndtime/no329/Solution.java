@@ -68,7 +68,7 @@ public class Solution {
 
 
     public static void main(String[] args) {
-		Solution sol = new Solution();
+        Solution sol = new Solution();
         System.out.println(sol.longestIncreasingPath(new int[][]{
                 new int[]{0,1,5,5},
         }));
