@@ -65,7 +65,7 @@ public class Solution {
         path.add(nodes[idx]);
         return path;
     }
-    
+
     private static class Node {
         int label;
         List<Node> neighbors;
