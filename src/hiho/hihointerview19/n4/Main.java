@@ -1,6 +1,10 @@
-package hiho.hihointerview16.n2;
+package hiho.hihointerview19.n4;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.Set;
@@ -17,6 +21,7 @@ public class Main {
 		boolean blocked = false;
 		long dist = Long.MAX_VALUE;
 		boolean visited = false;
+		Point prev = null;
 
 		private Point(int r, int c) {
 			this.r = r;
@@ -38,6 +43,7 @@ public class Main {
 			if (!nbr.visited && !nbr.blocked && nbr.dist > dist + len) {
 				queue.remove(nbr);
 				nbr.dist = dist + len;
+				nbr.prev = this;
 				queue.add(nbr);
 			}
 		}
@@ -87,9 +93,52 @@ public class Main {
 		}
 	}
 
+	private static class Query {
+		final int stR, stC, endR, endC;
+
+		private Query(int stR, int stC, int endR, int endC) {
+			this.stR = stR;
+			this.stC = stC;
+			this.endR = endR;
+			this.endC = endC;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			Query query = (Query) o;
+
+			if (stR != query.stR) {
+				return false;
+			}
+			if (stC != query.stC) {
+				return false;
+			}
+			if (endR != query.endR) {
+				return false;
+			}
+			return endC == query.endC;
+
+		}
+
+		@Override
+		public int hashCode() {
+			int result = stR;
+			result = 31 * result + stC;
+			result = 31 * result + endR;
+			result = 31 * result + endC;
+			return result;
+		}
+	}
+
+	private Map<Query, Long> cacheMap = new HashMap<>();
 	private PriorityQueue<Point> queue = new PriorityQueue<>();
 	private Set<Integer> visited = new HashSet<>();
 	private long minPath(int r0, int c0, int r1, int c1) {
+		Query q = new Query(r0, c0, r1, c1);
+		if (cacheMap.containsKey(q)) {
+			return cacheMap.get(q);
+		}
+
 		Point start = street[r0][c0], end = street[r1][c1];
 		queue.clear();
 		visited.clear();
@@ -104,14 +153,27 @@ public class Main {
 		queue.add(start);
 		while (!queue.isEmpty()) {
 			Point cur = queue.poll();
-			if (cur == end)
-				return cur.dist;
 
 			cur.visited = true;
 			cur.visitNeighbors();
 		}
 
-		return -1;
+		if (end.dist == Integer.MAX_VALUE)
+			return -1;
+
+		List<Point> pathRev = new ArrayList<>();
+		for (Point p = end; p != start; p = p.prev) {
+			pathRev.add(p);
+		}
+		pathRev.add(start);
+		for (int i = 0; i < pathRev.size() - 1; i++) {
+			Point end1 = pathRev.get(i);
+			for (int j = i + 1; j < pathRev.size(); j++) {
+				Point st1 = pathRev.get(j);
+				cacheMap.put(new Query(st1.r, st1.c, end1.r, end1.c), end1.dist - st1.dist);
+			}
+		}
+		return end.dist;
 	}
 
 	public static void main(String[] args) {
