@@ -2,94 +2,24 @@ package leetcode._2ndtime.no236;
 
 import leetcode.TreeNode;
 
-import java.util.Stack;
-
+/**
+ * Whiteboard coding!
+ */
 public class Solution {
-
+    private TreeNode lca, p, q;
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        Stack<TreeNode> st1 = new Stack<>(), st2 = new Stack<>();
-        getPath(root, p, q, st1, st2);
-        TreeNode res = root;
-
-        if (st1.isEmpty() && st2.isEmpty())
-            return null;
-
-        while(!st1.isEmpty() && !st2.isEmpty() && st1.peek() == st2.peek()) {
-            res = st1.pop();
-            st2.pop();
-        }
-
-        return res;
+        lca = null;
+        this.p = p; this.q = q;
+        find(root);
+        return lca;
     }
 
-    private int getPath(TreeNode root, TreeNode p, TreeNode q,
-                        Stack<TreeNode> st1, Stack<TreeNode> st2) {
-        if (root == null) return 0;
-
-        int res = 0;
-        if (root == p) {
-            st1.push(root);
-            res++;
-        }
-        if (root == q) {
-            st2.push(root);
-            res+=2;
-        }
-
-        int tmpRes =  getPath(root.left, p, q, st1, st2);
-        if (tmpRes == 1)
-            st1.push(root);
-        else if (tmpRes == 2)
-            st2.push(root);
-
-        res += tmpRes;
-        if (res == 3) return res;
-
-        tmpRes = getPath(root.right, p, q, st1, st2);
-        if (tmpRes == 1)
-            st1.push(root);
-        else if (tmpRes == 2)
-            st2.push(root);
-
-        res += tmpRes;
-        return res;
+    private int find(TreeNode node) {
+        if (node == null || lca != null) return 0;
+        int cnt = 0;
+        if (node == p || node == q) cnt++;
+        cnt = cnt + find(node.left) + find(node.right);
+        if (cnt == 2 && lca == null) lca = node;
+        return cnt;
     }
-
-
-    // public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-    //     Stack<TreeNode> st1 = new Stack<>(), st2 = new Stack<>();
-    //     getPath(root, p, st1);
-    //     getPath(root, q, st2);
-    //     TreeNode res = root;
-
-    //     if (st1.isEmpty() && st2.isEmpty())
-    //         return null;
-
-    //     while(!st1.isEmpty() && !st2.isEmpty() && st1.peek() == st2.peek()) {
-    //         res = st1.pop();
-    //         st2.pop();
-    //     }
-
-    //     return res;
-    // }
-
-    // private boolean getPath(TreeNode root, TreeNode n, Stack<TreeNode> st) {
-    //     if (root == null) return false;
-    //     if (root == n) {
-    //         st.push(root);
-    //         return true;
-    //     }
-
-    //     if (getPath(root.left, n, st)) {
-    //         st.push(root);
-    //         return true;
-    //     }
-
-    //     if (getPath(root.right, n, st)) {
-    //         st.push(root);
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
 }
