@@ -75,18 +75,5 @@ public class Main {
 		System.out.println(countByDigit(2, -1));
 		System.out.println(countByUpper(110, 0));
 		System.out.println(countByUpper(120, 0));
-
-//		try(Scanner scanner = new Scanner(System.in)) {
-//			while (scanner.hasNextInt()) {
-//				Main main = new Main();
-//				int n = scanner.nextInt();
-//				for (int i = 0; i < n; i++)
-//					main.addWord(scanner.next());
-//
-//				int q = scanner.nextInt();
-//				for (int i = 0; i < q; i++)
-//					System.out.println(main.query(scanner.next()));
-//			}
-//		}
 	}
 }
