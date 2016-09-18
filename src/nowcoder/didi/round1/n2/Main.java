@@ -1,4 +1,4 @@
-package nowcoder.didi.n2;
+package nowcoder.didi.round1.n2;
 
 import java.util.Arrays;
 import java.util.Scanner;
