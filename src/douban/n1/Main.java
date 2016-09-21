@@ -1,31 +1,30 @@
-package _360.n1;
-
-import java.util.Scanner;
+package douban.n1;
 
 public class Main {
-	private void deal() {
-		Scanner scanner = new Scanner(System.in);
-		char[][] lines = new char[3][];
-		while (scanner.hasNext()) {
-			for (int i = 0; i < 3; i++) {
-				lines[i] = scanner.next().toCharArray();
-			}
-			boolean legit = true;
-			for (int i = 0; i < 2; i++) {
-				for (int j = 0; j < 3; j++) {
-					if (lines[i][j] != lines[2-i][2-j]) {
-						legit = false;
-						break;
-					}
-				}
-				if (!legit) break;
-			}
-
-			System.out.println(legit ? "YES" : "NO");
-		}
+	private static class TreeNode {
+		TreeNode left, right;
+		int val;
 	}
 
-	public static void main(String[] args) {
-		new Main().deal();
+	private int cnt;
+	public int countSwap(TreeNode root) {
+		if (root == null) return 0;
+		cnt = 0;
+
+		visit(root, 0);
+
+		return cnt;
+	}
+
+	private void visit(TreeNode node, int level) {
+		if (node == null) return;
+		if (level % 2 == 0 && (node.left != null || node.right != null)) {
+			cnt++;
+			TreeNode tmp = node.left;
+			node.left = node.right;
+			node.right = tmp;
+		}
+		visit(node.left, level+1);
+		visit(node.right, level+1);
 	}
 }
