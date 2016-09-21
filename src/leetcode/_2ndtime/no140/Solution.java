@@ -1,95 +1,79 @@
 package leetcode._2ndtime.no140;
 
-import leetcode.Trie;
-
 import java.util.*;
 
 public class Solution {
+	private static class Trie {
+		public Trie[] children = new Trie[26];
+		public String word;
+
+		public void addWord(String word) {
+			Trie cur = this;
+			for (int i = 0; i < word.length(); i++) {
+				int pos = word.charAt(i) - 'a';
+				if (cur.children[pos] == null)
+					cur.children[pos] = new Trie();
+				cur = cur.children[pos];
+			}
+			cur.word = word;
+		}
+
+		private List<String> getPossibleWords(String str, int idx) {
+			Trie cur = this;
+			List<String> res = new ArrayList<>();
+			for (int i = idx; i < str.length(); i++) {
+				cur = cur.children[str.charAt(i)-'a'];
+				if (cur == null) break;
+				if (cur.word != null) res.add(cur.word);
+			}
+
+			return res;
+		}
+	}
 
 	private Trie root;
-	private List<String>[] compWords;
+	private Map<Integer, List<String>> cache = new HashMap<>();
+
 	public List<String> wordBreak(String s, Set<String> wordDict) {
+		cache.clear();
 		root = new Trie();
 		for (String w : wordDict)
 			root.addWord(w);
 
-		compWords = new List[s.length()];
+		int len = s.length();
+		List<List<String>>[] dp = new List[len+1];
+		dp[0] = Collections.singletonList(new ArrayList<>());
+		for (int i = 0; i < len; i++) {
+			if (dp[i] == null || dp[i].isEmpty()) continue;
 
-		List<Trie> incomp = new LinkedList<>();
-		List<Trie> tmp, next = new LinkedList<>();
-		incomp.add(root);
-		for (int i = 0; i < s.length(); i++) {
-			next.clear();
-			boolean comp = false;
-			int pos = s.charAt(i) - 'a';
-			for (Trie trie : incomp) {
-				Trie nt = trie.children[pos];
-				if (nt == null) continue;
-				if (nt.word != null) {
-					comp = true;
-					if (compWords[i] == null)
-						compWords[i] = new LinkedList<>();
-					compWords[i].add(nt.word);
+			List<String> nexts = root.getPossibleWords(s, i);
+			for (String next : nexts) {
+				int ni = i + next.length();
+				if (dp[ni] == null) {
+					dp[ni] = new ArrayList<>();
 				}
-
-				next.add(nt);
-			}
-			if (comp)
-				next.add(root);
-
-			tmp = next;
-			next = incomp;
-			incomp = tmp;
-		}
-
-		List<String> last = compWords[s.length()-1];
-		if (last == null)
-			return Collections.emptyList();
-
-		List<StringBuilder> resSb = getAll(s.length()-1);
-
-		List<String> res = new LinkedList<>();
-		for (StringBuilder sb : resSb) {
-			res.add(sb.deleteCharAt(0).toString());
-		}
-
-		return res;
-	}
-
-	private List<StringBuilder> getAll(int idx) {
-		List<StringBuilder> res = new LinkedList<>();
-		if (idx == -1) {
-			res.add(new StringBuilder());
-			return res;
-		}
-
-		for (String w : compWords[idx]) {
-			List<StringBuilder> prev = getAll(idx - w.length());
-			for (StringBuilder sb : prev) {
-				res.add(sb.append(' ').append(w));
+				List<List<String>> lists = dp[ni];
+				for (List<String> curList : dp[i]) {
+					List<String> nList = new ArrayList<>(curList);
+					nList.add(next);
+					lists.add(nList);
+				}
 			}
 		}
 
-		return res;
+		return genRes(dp[len]);
 	}
 
-	public static void main(String[] args) {
-		Set<String> set = new HashSet<String>();
-		set.add("a");
-		set.add("aa");
-		System.out.println(new Solution().wordBreak("aa", set));
-
-		set = new HashSet<String>();
-		set.add("a");
-		set.add("aa");
-		set.add("aaa");
-		set.add("aaaa");
-		set.add("aaaaa");
-		set.add("aaaaaa");
-		set.add("aaaaaaa");
-		set.add("aaaaaaaa");
-		set.add("aaaaaaaaa");
-		set.add("aaaaaaaaaa");
-		System.out.println(new Solution().wordBreak("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", set));
+	private List<String> genRes(List<List<String>> lists) {
+		List<String> res = new ArrayList<>();
+		StringBuilder sb = new StringBuilder();
+		for (List<String> list : lists) {
+			sb.setLength(0);
+			for (String str : list) {
+				sb.append(' ').append(str);
+			}
+			res.add(sb.substring(1));
+		}
+		return res;
 	}
 }

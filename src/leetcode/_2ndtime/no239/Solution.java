@@ -1,47 +1,42 @@
 package leetcode._2ndtime.no239;
 
-import java.util.PriorityQueue;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
+ * O(n) time!
  * Whiteboard coding!
  */
 public class Solution {
-    private static class Num implements Comparable<Num>{
-        final int idx, num;
-
-        private Num(int idx, int num) {
-            this.idx = idx;
-            this.num = num;
-        }
-
-        @Override
-        public int compareTo(Num o) {
-            return Integer.compare(o.num, num);
-        }
-    }
-
-    private PriorityQueue<Num> heap = new PriorityQueue<>();
+    private Deque<Integer> deque = new ArrayDeque<>();
     public int[] maxSlidingWindow(int[] nums, int k) {
         int len;
         if (nums == null || (len=nums.length) == 0 || k <= 0 || k > len) return new int[0];
 
-        heap.clear();
-        for (int i = 0; i < k; i++) {
-            heap.add(new Num(i, nums[i]));
+        deque.clear();
+        for (int i = 0; i < k-1; i++) {
+            addToDeque(nums[i]);
         }
 
-        k--;
-        int[] res = new int[len-k];
-        for (int i = k; i < len; i++) {
-            Num num = new Num(i, nums[i]);
-            heap.add(num);
-            while (!heap.isEmpty()) {
-                num = heap.peek();
-                if (num.idx < i - k) heap.poll();
-                else break;
-            }
-            res[i-k] = num.num;
+        int[] res = new int[len - k + 1];
+        for (int i = k-1; i < len; i++) {
+            addToDeque(nums[i]);
+            res[i-k+1] = deque.peekFirst();
+            removeFromDeque(nums[i-k+1]);
         }
         return res;
+    }
+
+    private void addToDeque(int n) {
+        while (!deque.isEmpty() && deque.peekLast() < n) {
+            deque.pollLast();
+        }
+        deque.addLast(n);
+    }
+
+    private void removeFromDeque(int n) {
+        if (deque.peekFirst() == n) {
+            deque.pollFirst();
+        }
     }
 }

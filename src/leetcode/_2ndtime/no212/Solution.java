@@ -1,66 +1,86 @@
 package leetcode._2ndtime.no212;
 
-import leetcode.Trie;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Solution {
+    private static class Trie {
+        public Trie[] children;
+        public String word;
 
-    private boolean[][] flag;
+        public void addWord(String word) {
+            Trie cur = this;
+            for (int i = 0; i < word.length(); i++) {
+                int pos = word.charAt(i) - 'a';
+                if (cur.children == null)
+                    cur.children = new Trie[26];
+
+                if (cur.children[pos] == null)
+                    cur.children[pos] = new Trie();
+                cur = cur.children[pos];
+            }
+            cur.word = word;
+        }
+    }
+
     private char[][] board;
-    private char[] wchar;
+    private int r, c;
+    private List<String> res;
     private Trie root;
-    private Set<String> resList;
-
     public List<String> findWords(char[][] board, String[] words) {
-        if (words == null || words.length == 0)
-            return Collections.emptyList();
-        if (board == null || board.length == 0 || board[0] == null || board[0].length == 0)
+        if (board == null || (r = board.length) == 0 ||
+                board[0] == null || (c = board[0].length) == 0)
             return Collections.emptyList();
 
-        root = new Trie();
         this.board = board;
-        this.flag = new boolean[board.length][board[0].length];
-
+        res = new ArrayList<>();
+        root = new Trie();
         for (String w : words) {
             root.addWord(w);
         }
-
-        resList = new HashSet<>();
-
-        List<int[]>[] poses = new List[26];
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                findWord(root, i,j);
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                visit(i, j, root);
             }
         }
 
-        return new ArrayList<>(resList);
+        return res;
     }
 
-    private void findWord(Trie cur, int r, int c) {
-        if (r < 0 || r >= board.length || c < 0 || c >= board[0].length)
-            return ;
-        if (flag[r][c])
-            return ;
-        int pos = board[r][c] - 'a';
+    private void visit(int i, int j, Trie node) {
+        char ch;
+        Trie next;
+        if (i < 0 || i >= r || j < 0 || j >= c ||
+                (ch=board[i][j]) == '.' ||
+                node == null || node.children == null ||
+                (next=node.children[ch-'a']) == null)
+            return;
 
-        Trie child = cur.children[pos];
-        if (child == null)
-            return ;
+        if (next.word != null) {
+            res.add(next.word);
+            next.word = null;
+        }
+        board[i][j] = '.';
 
-        if (child.word != null)
-            resList.add(child.word);
+        visit(i-1, j, next);
+        visit(i+1, j, next);
+        visit(i, j-1, next);
+        visit(i, j+1, next);
 
-        flag[r][c] = true;
-        findWord(child, r-1, c);
-        findWord(child, r+1, c);
-        findWord(child, r, c-1);
-        findWord(child, r, c+1);
-        flag[r][c] = false;
+        board[i][j] = ch;
     }
 
     public static void main(String[] args) {
         Solution sol = new Solution();
+        char[][] board = new char[][]{
+                "oaan".toCharArray(),
+                "etae".toCharArray(),
+                "ihkr".toCharArray(),
+                "iflv".toCharArray(),
+        };
+        String[] words = new String[]{"oath","pea","eat","rain"};
+
+        System.out.println(sol.findWords(board, words));
     }
 }
