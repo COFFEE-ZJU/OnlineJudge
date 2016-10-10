@@ -3,9 +3,10 @@ package airbnb.n1;
 import java.util.*;
 
 public class Main {
+	// class used to store the result string
 	private static class House {
-		final int hostId;
-		final String info;
+		final int hostId;	// extracted hostId
+		final String info;	// original result string
 
 		private House(String info) {
 			this.info = info;
@@ -14,42 +15,50 @@ public class Main {
 	}
 
 	public String[] paginate(int resultsPerPage, String[] results) {
-		List<House> delayed = new LinkedList<>();
-		List<String> res = new ArrayList<>();
-		Set<Integer> curHosts = new HashSet<>();
+		List<House> delayed = new LinkedList<>();	// store results that need to be delayed
+		List<String> res = new ArrayList<>();	// final result string list
+		Set<Integer> curHosts = new HashSet<>();    // hostIds in the current page
 		int len = results.length;
 
-		for (int i = 0; i < len || !delayed.isEmpty(); ) {
-			curHosts.clear();
-			int j = 0;
+		for (int i = 0; i < len || !delayed.isEmpty(); ) {  // not all results are processed
+			curHosts.clear();   // start a new page
+			int j = 0;  // j indicates result cnt in the cur page
+
+            // go through all the delayed results, they should have higher priority
 			for (Iterator<House> it = delayed.iterator(); it.hasNext() && j < resultsPerPage;) {
 				House h = it.next();
-				if (curHosts.add(h.hostId)) {
+				if (curHosts.add(h.hostId)) {   // not occurred yet
+				    // remove from delay list
 					it.remove();
+                    // add to res
 					res.add(h.info);
 					j++;
 				}
 			}
 
+			// go through results in normal results list (passed in)
 			while (i < len && j < resultsPerPage) {
 				House h = new House(results[i++]);
-				if (curHosts.add(h.hostId)) {
+				if (curHosts.add(h.hostId)) {   // not occurred yet
 					res.add(h.info);
 					j++;
-				} else {
+				} else {    // goes to delay list if already occurred
 					delayed.add(h);
 				}
 			}
 
+			// cur page still not filled after previous steps
+            // go through delay list again and ignore hostId duplication
 			while (j < resultsPerPage && !delayed.isEmpty()) {
 				res.add(delayed.remove(0).info);
 				j++;
 			}
 
+			// empty string indicating this page has finished
 			res.add("");
 		}
 
-		res.remove(res.size()-1);
+		res.remove(res.size()-1);   // remove last empty string
 		return res.toArray(new String[0]);
 	}
 
